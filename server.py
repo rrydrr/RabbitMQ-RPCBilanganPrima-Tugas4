@@ -46,5 +46,12 @@ def on_request(ch, method, props, body):
 channel.basic_qos(prefetch_count=1)
 channel.basic_consume(queue='rpc_queue', on_message_callback=on_request)
 
-print("Server RPC menunggu permintaan...")
-channel.start_consuming()
+try:
+    # Memulai menerima permintaan
+    print("Server RPC menunggu permintaan... (Gunakan ctrl+c untuk menutup)")
+    channel.start_consuming()
+except KeyboardInterrupt:
+    # Menutup koneksi ketika ctrl+c ditekan
+    print("Server dihentikan oleh pengguna.")
+    channel.stop_consuming()
+    connection.close()

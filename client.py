@@ -49,17 +49,25 @@ if __name__ == "__main__":
     # Menghubungkan ke server RPC
     rpc_client = RpcClient()
     
-    while True:
-        try:
-            inpt = input('Masukkan bilangan yang akan dijadikan limit (ketik "exit" untuk keluar) : ')
-            if(inpt == 'exit'):
-                break
-            limit = int(inpt)
-        except:
-            print('Fomat anda salah, Harap untuk hanya memasukkan angka')
-        
-        # Menjalankan RPC Request ke server
-        response = RpcRequest(limit)
-        
-        # Menampilkan hasil
-        print(f"Bilangan prima hingga {limit}: {response}")
+    try:
+        while True:
+            try:
+                inpt = input('Masukkan bilangan yang akan dijadikan limit (ketik "exit" untuk keluar) : ')
+                if(inpt == 'exit'):
+                    break
+                limit = int(inpt)
+            except ValueError:
+                print('Format anda salah, Harap untuk hanya memasukkan angka')
+                continue
+            
+            # Menjalankan RPC Request ke server
+            response = RpcRequest(limit)
+            
+            # Menampilkan hasil
+            print(f"Bilangan prima hingga {limit}: {response}")
+    except KeyboardInterrupt:
+        print("\nProgram dihentikan oleh pengguna.")
+    finally:
+        # Menutup koneksi ke server
+        rpc_client.connection.close()
+        print("Koneksi ditutup.")
